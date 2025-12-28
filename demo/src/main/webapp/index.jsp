@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head><title>Student Registration</title></head>
+<head>
+    <title>Student System</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
 <body>
     <h2>Register Student</h2>
     <form action="register" method="post">

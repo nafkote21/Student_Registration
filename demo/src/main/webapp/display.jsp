@@ -1,7 +1,10 @@
 <%@ page import="java.util.*" %>
 <!DOCTYPE html>
 <html>
-<head><title>Registered Students</title></head>
+<head>
+    <title>Student System</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
 <body>
     <center>
         <h2>Registered Students</h2>
