@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Student Registration</title>
+    <title>Student System</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
     <h2>Register Student</h2>

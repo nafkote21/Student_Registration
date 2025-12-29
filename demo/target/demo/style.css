@@ -1,16 +1,16 @@
 /* General Body Styling */
 body {
     font-family: Arial, sans-serif;
-    background-color: #c38686;
+    background-color: #f4f4f4;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     min-height: 100vh;
     margin: 0;
     padding-top: 50px;
 }
 
+/* Form Styling (index.jsp) */
 .form-container {
     background-color: #fff;
     padding: 30px;
