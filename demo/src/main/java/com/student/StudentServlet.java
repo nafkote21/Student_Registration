@@ -1,62 +1,58 @@
 package com.student;
 
-import java.io.*;
-import java.sql.*;
-import java.util.*;
-import javax.servlet.*;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
-@WebServlet(urlPatterns = { "/register", "/show_all" })
+@WebServlet("/student")
 public class StudentServlet extends HttpServlet {
-    private String dbUrl = "jdbc:mysql://localhost:3306/students_db";
-    private String dbUser = "root";
-    private String dbPass = "123456"; // Use the password from your Workbench login
 
-    // Handles Student Registration (POST /register)
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        int year = Integer.parseInt(request.getParameter("year"));
+    private studentDB studentDB;
 
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPass)) {
-                String sql = "INSERT INTO students (name, email, year) VALUES (?, ?, ?)";
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                stmt.setString(1, name);
-                stmt.setString(2, email);
-                stmt.setInt(3, year);
-                stmt.executeUpdate(); // [cite: 15]
-                response.sendRedirect("show_all");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void init() throws ServletException {
+        studentDB = new studentDB();
     }
 
-    // Handles Viewing All Students (GET /show_all)
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        List<Map<String, String>> students = new ArrayList<>();
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPass)) {
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM students"); // [cite: 17]
-                while (rs.next()) {
-                    Map<String, String> s = new HashMap<>();
-                    s.put("name", rs.getString("name"));
-                    s.put("email", rs.getString("email"));
-                    s.put("year", rs.getString("year"));
-                    students.add(s);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            List<Student> studentList = studentDB.getAllStudents();
+            request.setAttribute("students", studentList);
+        } catch (SQLException e) {
+            System.err.println("Error fetching students: " + e.getMessage());
+            request.setAttribute("errorMessage", "Database error: Could not retrieve students.");
         }
-        request.setAttribute("studentList", students);
-        request.getRequestDispatcher("display.jsp").forward(request, response);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+
+        if (name != null && !name.trim().isEmpty() && email != null && !email.trim().isEmpty()) {
+            Student newStudent = new Student(name, email);
+            try {
+                studentDB.addStudent(newStudent);
+            } catch (SQLException e) {
+                System.err.println("Error adding student: " + e.getMessage());
+                request.setAttribute("errorMessage", "Database error: Could not add student.");
+                doGet(request, response);
+                return;
+            }
+        } else {
+            request.setAttribute("errorMessage", "Name and Email cannot be empty.");
+            doGet(request, response);
+            return;
+        }
+
+        response.sendRedirect(request.getContextPath() + "/student");
     }
 }
