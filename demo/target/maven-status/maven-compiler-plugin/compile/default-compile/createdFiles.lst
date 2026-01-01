@@ -1,3 +1,4 @@
 com\student\Student.class
 com\student\DatabaseConnection.class
+com\student\StudentServlet.class
 com\student\StudentDAO.class

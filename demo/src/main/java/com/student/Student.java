@@ -4,11 +4,12 @@ public class Student {
     private int id;
     private String name;
     private String email;
+    private int year;
 
-    public Student(int id, String name, String email) {
-        this.id = id;
+   public Student(String name, String email, int year) {
         this.name = name;
         this.email = email;
+        this.year = year;
     }
 
     public int getId() {
@@ -21,5 +22,8 @@ public class Student {
 
     public String getEmail() {
         return email;
+    }
+    public int getYear() {
+        return year;
     }
 }

@@ -93,11 +93,15 @@
         </c:if>
 
         <h2>Register New Student</h2>
-        <!-- The form submits to the /student servlet using POST method -->
+
         <form action="${pageContext.request.contextPath}/student" method="post">
             <div>
                 <label for="name">Student Name:</label>
                 <input type="text" id="name" name="name" required>
+            </div>
+            <div>
+                <label for="year">Student Year:</label>
+                <input type="text" id="year" name="year" required>
             </div>
             <div>
                 <label for="email">Email:</label>
@@ -118,7 +122,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Iterate over the 'students' list passed from the servlet -->
+
                         <c:forEach var="student" items="${students}">
                             <tr>
                                 <td>${student.id}</td>
