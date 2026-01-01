@@ -10,12 +10,13 @@ import javax.servlet.http.*;
 
 @WebServlet("/student")
 public class StudentServlet extends HttpServlet {
-    // Database credentials
-    String url = "jdbc:mysql://localhost:3306/student_db";
-    String user = "root"; 
-    String pass = "password"; 
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    String url = "jdbc:mysql://localhost:3306/student_db";
+    String user = "root";
+    String pass = "123456";
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         int year = Integer.parseInt(request.getParameter("year"));
@@ -28,13 +29,16 @@ public class StudentServlet extends HttpServlet {
             ps.setString(2, email);
             ps.setInt(3, year);
             ps.executeUpdate();
-            
+
             request.setAttribute("message", "Successfully Registered!");
             doGet(request, response); // Refresh the list
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         List<Student> students = new ArrayList<>();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -42,11 +46,13 @@ public class StudentServlet extends HttpServlet {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM students");
 
-            while(rs.next()) {
+            while (rs.next()) {
                 students.add(new Student(rs.getString("name"), rs.getString("email"), rs.getInt("year")));
             }
             request.setAttribute("studentList", students);
             request.getRequestDispatcher("index.jsp").forward(request, response);
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
