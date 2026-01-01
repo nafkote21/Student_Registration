@@ -5,8 +5,17 @@
 
   <display-name>Student Registration Application</display-name>
 
+  <servlet>
+    <servlet-name>StudentServlet</servlet-name>
+    <servlet-class>com.student.StudentServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>StudentServlet</servlet-name>
+    <url-pattern>/student</url-pattern>
+  </servlet-mapping>
+
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
-
 </web-app>

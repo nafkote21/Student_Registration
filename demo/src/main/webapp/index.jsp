@@ -90,6 +90,9 @@
 
         <c:if test="${not empty errorMessage}">
             <p class="error-message">${errorMessage}</p>
+            <p style="color: #28a745; font-weight: bold; text-align: center; background-color: #d4edda; padding: 10px; border-radius: 5px; border: 1px solid #c3e6cb;">
+        ${successMessage}
+    </p>
         </c:if>
 
         <h2>Register New Student</h2>
@@ -119,6 +122,7 @@
                             <th>ID</th>
                             <th>Name</th>
                             <th>Email</th>
+                            <th>Year</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -128,6 +132,7 @@
                                 <td>${student.id}</td>
                                 <td>${student.name}</td>
                                 <td>${student.email}</td>
+                                <td>${student.year}</td>
                             </tr>
                         </c:forEach>
                     </tbody>

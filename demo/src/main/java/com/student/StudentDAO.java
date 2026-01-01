@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentDAO {
-    // Note: DatabaseConnection.getConnection() must be defined elsewhere in your
-    // project
+
     public List<Student> getAllStudents() throws SQLException {
         List<Student> students = new ArrayList<>();
-        // 1. Added 'year' to the SELECT statement
         String selectSQL = "SELECT name, email, year FROM students ORDER BY id";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -17,12 +15,10 @@ public class StudentDAO {
                 ResultSet resultSet = statement.executeQuery(selectSQL)) {
 
             while (resultSet.next()) {
-                // 2. Removed 'id' variable to fix the "unused variable" warning
+
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
                 int year = resultSet.getInt("year");
-
-                // 3. Passes the data to the Student constructor
                 students.add(new Student(name, email, year));
             }
         }

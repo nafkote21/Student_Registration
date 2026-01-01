@@ -1,57 +1,51 @@
 package com.student;
 
 import java.io.IOException;
-import java.sql.*;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/student")
 public class StudentServlet extends HttpServlet {
+    private StudentDAO studentDAO = new StudentDAO();
 
-    String url = "jdbc:mysql://localhost:3306/student_db";
-    String user = "root";
-    String pass = "123456";
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    // This handles the "Register Student" button (POST)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         int year = Integer.parseInt(request.getParameter("year"));
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, user, pass);
-            PreparedStatement ps = con.prepareStatement("INSERT INTO students(name, email, year) VALUES(?,?,?)");
-            ps.setString(1, name);
-            ps.setString(2, email);
-            ps.setInt(3, year);
-            ps.executeUpdate();
+            // 1. Save student using your DAO
+            Student student = new Student(name, email, year);
+            studentDAO.registerStudent(student);
 
-            request.setAttribute("message", "Successfully Registered!");
-            doGet(request, response); // Refresh the list
-        } catch (Exception e) {
-            e.printStackTrace();
+            // 2. Set the Success Message
+            request.setAttribute("successMessage", "The student registration IS SUCCESSFULLY done");
+
+            // 3. Immediately refresh the list to show in the table
+            doGet(request, response);
+
+        } catch (SQLException e) {
+            request.setAttribute("errorMessage", "Database Error: " + e.getMessage());
+            doGet(request, response);
         }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        List<Student> students = new ArrayList<>();
+    // This handles loading the list (GET)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, user, pass);
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM students");
-
-            while (rs.next()) {
-                students.add(new Student(rs.getString("name"), rs.getString("email"), rs.getInt("year")));
-            }
-            request.setAttribute("studentList", students);
+            // Fetch all students from your DAO
+            List<Student> studentList = studentDAO.getAllStudents();
+            
+            // Send the list to the JSP (the attribute name "students" must match your JSP)
+            request.setAttribute("students", studentList);
+            
+            // Forward to index.jsp
             request.getRequestDispatcher("index.jsp").forward(request, response);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
