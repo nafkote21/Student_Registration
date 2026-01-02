@@ -40,11 +40,11 @@
             font-weight: bold;
         }
         input[type="text"], input[type="email"] {
-            width: calc(100% - 22px); /* Account for padding and border */
+            width: calc(100% - 22px); 
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            box-sizing: border-box;
         }
         button {
             background-color: #28a745;
@@ -90,14 +90,16 @@
 
         <c:if test="${not empty errorMessage}">
             <p class="error-message">${errorMessage}</p>
+        </c:if>
+        <c:if test="${not empty successMessage}">
             <p style="color: #28a745; font-weight: bold; text-align: center; background-color: #d4edda; padding: 10px; border-radius: 5px; border: 1px solid #c3e6cb;">
         ${successMessage}
-    </p>
+            </p> 
         </c:if>
 
         <h2>Register New Student</h2>
 
-        <form action="${pageContext.request.contextPath}/register" method="post">
+       <form action="${pageContext.request.contextPath}/register" method="post">
             <div>
                 <label for="name">Student Name:</label>
                 <input type="text" id="name" name="name" required>

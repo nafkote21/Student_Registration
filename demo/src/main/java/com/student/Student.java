@@ -23,6 +23,7 @@ public class Student {
     public String getEmail() {
         return email;
     }
+
     public int getYear() {
         return year;
     }

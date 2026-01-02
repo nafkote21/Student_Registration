@@ -7,8 +7,8 @@ import java.util.List;
 public class StudentDAO {
 
     public List<Student> getAllStudents() throws SQLException {
-        List<Student> students = new ArrayList<>();
-        String selectSQL = "SELECT name, email, year FROM students ORDER BY id";
+        List<Student> student = new ArrayList<>();
+        String selectSQL = "SELECT name, email, year FROM student ORDER BY id";
 
         try (Connection connection = DatabaseConnection.getConnection();
                 Statement statement = connection.createStatement();
@@ -19,14 +19,14 @@ public class StudentDAO {
                 String name = resultSet.getString("name");
                 String email = resultSet.getString("email");
                 int year = resultSet.getInt("year");
-                students.add(new Student(name, email, year));
+                student.add(new Student(name, email, year));
             }
         }
-        return students;
+        return student;
     }
 
     public void registerStudent(Student student) throws SQLException {
-        String insertSQL = "INSERT INTO students (name, email, year) VALUES (?, ?, ?)";
+        String insertSQL = "INSERT INTO student (name, email, year) VALUES (?, ?, ?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
                 PreparedStatement ps = connection.prepareStatement(insertSQL)) {
